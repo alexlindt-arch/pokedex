@@ -39,13 +39,20 @@
       <p id="noResults" class="no-results hidden">No Pokémon found for your search.</p>
       <p id="pokeCount" class="poke-count"></p>
       <div id="pokemonGrid" class="pokemon-grid"></div>
-      <div id="loadingScreen" class="loading-screen hidden">
-        <div class="spinner"></div>
-        <span>Loading Pokémon…</span>
-      </div>
       <button id="loadMoreBtn" class="load-more-btn">Load More Pokémon</button>
     </div>
   </main>
+
+  <div id="loadingScreen" class="loading-overlay hidden">
+    <div class="loading-box">
+      <div class="pokeball-spinner">
+        <div class="pokeball-top"></div>
+        <div class="pokeball-bottom"></div>
+        <div class="pokeball-center"></div>
+      </div>
+      <p class="loading-text">Loading Pokémon<span class="loading-dots"></span></p>
+    </div>
+  </div>
 
   <div id="overlay" class="overlay hidden">
     <button id="prevBtn" class="nav-btn prev-btn" aria-label="Previous">&#8249;</button>

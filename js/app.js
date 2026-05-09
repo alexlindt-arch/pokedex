@@ -6,6 +6,10 @@ const state = {
   isLoading: false
 };
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function showLoading(visible) {
   document.getElementById('loadingScreen').classList.toggle('hidden', !visible);
 }
@@ -54,7 +58,10 @@ function appendPokemonsToGrid(pokemons) {
 async function loadPokemons(offset) {
   showLoading(true);
   try {
-    const list = await fetchPokemonList(offset, state.limit);
+    const [list] = await Promise.all([
+      fetchPokemonList(offset, state.limit),
+      sleep(700)
+    ]);
     const pokemons = await Promise.all(list.results.map(p => fetchPokemonDetail(p.name)));
     appendPokemonsToGrid(pokemons);
     attachCardListeners();
