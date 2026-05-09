@@ -168,10 +168,12 @@ function createOverlayHeader(pokemon) {
   const img = getSprite(pokemon);
   return `<div class="ov-header" style="--card-color:${color}">
     <div class="ov-name-row">
-      <h2>${name}</h2>
+      <div class="ov-header-left">
+        <h2>${name}</h2>
+        <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
+      </div>
       <span class="poke-id">#${id}</span>
     </div>
-    <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
     ${createOverlayImgHTML(img, name, color)}
   </div>`;
 }
