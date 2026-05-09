@@ -165,7 +165,6 @@ function createOverlayHeader(pokemon) {
   const color = getTypeColor(pokemon.types);
   const name = formatName(pokemon.name);
   const id = String(pokemon.id).padStart(3, '0');
-  const img = getSprite(pokemon);
   return `<div class="ov-header" style="--card-color:${color}">
     <div class="ov-name-row">
       <div class="ov-header-left">
@@ -174,7 +173,6 @@ function createOverlayHeader(pokemon) {
       </div>
       <span class="poke-id">#${id}</span>
     </div>
-    ${createOverlayImgHTML(img, name, color)}
   </div>`;
 }
 
@@ -189,7 +187,11 @@ function createOverlayBody(pokemon) {
 }
 
 function createOverlayHTML(pokemon) {
-  return createOverlayHeader(pokemon) + createOverlayBody(pokemon);
+  const color = getTypeColor(pokemon.types);
+  const img = getSprite(pokemon);
+  const name = formatName(pokemon.name);
+  const boundary = `<div class="ov-img-boundary" style="--card-color:${color}">${createOverlayImgHTML(img, name, color)}</div>`;
+  return createOverlayHeader(pokemon) + boundary + createOverlayBody(pokemon);
 }
 
 function buildEvoNames(chain, names = []) {
