@@ -131,10 +131,31 @@ function loadDescription(species) {
   if (el && entry) el.textContent = entry.flavor_text.replace(/[\f\n]/g, ' ');
 }
 
+function getGenderHTML(genderRate) {
+  if (genderRate === -1) return 'Genderless';
+  const female = ((genderRate / 8) * 100).toFixed(1);
+  const male = (100 - parseFloat(female)).toFixed(1);
+  return `♂ ${male}%&nbsp;&nbsp;♀ ${female}%`;
+}
+
+function renderBreedingInfo(species) {
+  const el = document.getElementById('breedingInfo');
+  if (!el) return;
+  const groups = species.egg_groups.map(g => formatName(g.name)).join(', ') || '—';
+  const gender = getGenderHTML(species.gender_rate);
+  const cycles = species.hatch_counter !== undefined ? `${species.hatch_counter} cycles` : '—';
+  el.innerHTML = `
+    <div class="about-row"><span>Egg Groups</span><strong>${groups}</strong></div>
+    <div class="about-row"><span>Gender</span><strong>${gender}</strong></div>
+    <div class="about-row"><span>Egg Cycles</span><strong>${cycles}</strong></div>
+  `;
+}
+
 async function loadSpeciesData(pokemonId) {
   try {
     const species = await fetchSpecies(pokemonId);
     loadDescription(species);
+    renderBreedingInfo(species);
     const chainData = await fetchEvolutionChain(species.evolution_chain.url);
     renderEvoChain(chainData);
     attachEvoListeners();

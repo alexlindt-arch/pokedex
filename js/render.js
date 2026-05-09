@@ -125,11 +125,21 @@ function createAboutRows(pokemon) {
   </div>`;
 }
 
+function createBreedingHTML() {
+  return `<div class="ov-section">
+    <h4>Breeding</h4>
+    <div id="breedingInfo" class="about-grid">
+      <div class="about-row"><span>Egg Groups</span><strong>—</strong></div>
+      <div class="about-row"><span>Gender</span><strong>—</strong></div>
+      <div class="about-row"><span>Egg Cycles</span><strong>—</strong></div>
+    </div>
+  </div>`;
+}
+
 function createAboutContent(pokemon) {
-  const abilities = createAbilitiesHTML(pokemon.abilities);
   return `<div class="tab-content active" data-content="about">
     ${createAboutRows(pokemon)}
-    <div class="ov-section"><h4>Abilities</h4><div class="abilities">${abilities}</div></div>
+    ${createBreedingHTML()}
     <p id="speciesDesc" class="species-desc">Loading description…</p>
   </div>`;
 }
