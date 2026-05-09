@@ -406,7 +406,7 @@ main { padding: 2rem 1.5rem 3rem; }
   position: relative;
   width: 210px; height: 210px;
   margin: 0 auto;
-  margin-bottom: -175px;
+  margin-bottom: -205px;
   overflow: visible;
 }
 
@@ -446,7 +446,7 @@ main { padding: 2rem 1.5rem 3rem; }
 /* ── Overlay Body ────────────────────────────────── */
 .ov-body {
   background: #fff;
-  padding: 190px 1.4rem 1.6rem;
+  padding: 220px 1.4rem 1.6rem;
   border-radius: 0 0 24px 24px;
 }
 
