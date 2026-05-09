@@ -43,6 +43,20 @@ function animateStatBars() {
   });
 }
 
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab-content').forEach(c =>
+    c.classList.toggle('active', c.dataset.content === tabName));
+  if (tabName === 'stats') animateStatBars();
+}
+
+function initTabListeners() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+}
+
 function appendPokemonsToGrid(pokemons) {
   const grid = document.getElementById('pokemonGrid');
   pokemons.forEach((p, i) => {
@@ -93,9 +107,9 @@ async function openOverlay(pokemonId) {
   document.getElementById('overlayCard').scrollTop = 0;
   document.getElementById('overlay').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
-  animateStatBars();
   updateNavBtns();
-  loadEvolutionChain(pokemon.id);
+  initTabListeners();
+  loadSpeciesData(pokemon.id);
 }
 
 function closeOverlay() {
@@ -111,6 +125,25 @@ async function navigateOverlay(direction) {
   await openOverlay(state.displayedIds[newIndex]);
 }
 
+function loadDescription(species) {
+  const entry = species.flavor_text_entries.find(e => e.language.name === 'en');
+  const el = document.getElementById('speciesDesc');
+  if (el && entry) el.textContent = entry.flavor_text.replace(/[\f\n]/g, ' ');
+}
+
+async function loadSpeciesData(pokemonId) {
+  try {
+    const species = await fetchSpecies(pokemonId);
+    loadDescription(species);
+    const chainData = await fetchEvolutionChain(species.evolution_chain.url);
+    renderEvoChain(chainData);
+    attachEvoListeners();
+  } catch {
+    const el = document.getElementById('evoChain');
+    if (el) el.innerHTML = '';
+  }
+}
+
 function attachEvoListeners() {
   document.querySelectorAll('.evo-name[data-name]').forEach(span => {
     span.style.cursor = 'pointer';
@@ -119,18 +152,6 @@ function attachEvoListeners() {
       openOverlay(pokemon.id);
     });
   });
-}
-
-async function loadEvolutionChain(pokemonId) {
-  try {
-    const species = await fetchSpecies(pokemonId);
-    const chainData = await fetchEvolutionChain(species.evolution_chain.url);
-    renderEvoChain(chainData);
-    attachEvoListeners();
-  } catch {
-    const el = document.getElementById('evoChain');
-    if (el) el.innerHTML = '';
-  }
 }
 
 async function handleSearch() {
