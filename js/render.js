@@ -80,14 +80,23 @@ function createAbilitiesHTML(abilities) {
     .join('');
 }
 
-function createInfoSection(pokemon) {
-  const h = (pokemon.height / 10).toFixed(1);
-  const w = (pokemon.weight / 10).toFixed(1);
-  const exp = pokemon.base_experience || '—';
-  return `<div class="info-row">
-    <div class="info-item"><span>Height</span><strong>${h} m</strong></div>
-    <div class="info-item"><span>Weight</span><strong>${w} kg</strong></div>
-    <div class="info-item"><span>Base Exp</span><strong>${exp}</strong></div>
+function createMoveTag(move) {
+  return `<span class="move-tag">${formatName(move.move.name)}</span>`;
+}
+
+function createTabNav() {
+  return `<div class="tab-nav">
+    <button class="tab-btn active" data-tab="about">About</button>
+    <button class="tab-btn" data-tab="stats">Base Stats</button>
+    <button class="tab-btn" data-tab="evolution">Evolution</button>
+    <button class="tab-btn" data-tab="moves">Moves</button>
+  </div>`;
+}
+
+function createOverlayImgHTML(img, name, color) {
+  return `<div class="img-wrapper">
+    <div class="img-glow" style="background:${color}"></div>
+    <img src="${img}" alt="${name}" class="ov-img">
   </div>`;
 }
 
@@ -98,22 +107,58 @@ function createOverlayHeader(pokemon) {
   const img = getSprite(pokemon);
   return `<div class="ov-header" style="--card-color:${color}">
     <span class="poke-id">#${id}</span>
-    <img src="${img}" alt="${name}" class="ov-img">
+    ${createOverlayImgHTML(img, name, color)}
     <h2>${name}</h2>
     <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
+    ${createTabNav()}
+  </div>`;
+}
+
+function createAboutRows(pokemon) {
+  const h = (pokemon.height / 10).toFixed(1);
+  const w = (pokemon.weight / 10).toFixed(1);
+  const exp = pokemon.base_experience || '—';
+  return `<div class="about-grid">
+    <div class="about-row"><span>Height</span><strong>${h} m</strong></div>
+    <div class="about-row"><span>Weight</span><strong>${w} kg</strong></div>
+    <div class="about-row"><span>Base Exp</span><strong>${exp}</strong></div>
+  </div>`;
+}
+
+function createAboutContent(pokemon) {
+  const abilities = createAbilitiesHTML(pokemon.abilities);
+  return `<div class="tab-content active" data-content="about">
+    ${createAboutRows(pokemon)}
+    <div class="ov-section"><h4>Abilities</h4><div class="abilities">${abilities}</div></div>
+    <p id="speciesDesc" class="species-desc">Loading description…</p>
+  </div>`;
+}
+
+function createStatsContent(pokemon) {
+  return `<div class="tab-content" data-content="stats">
+    ${createStatsHTML(pokemon.stats)}
+  </div>`;
+}
+
+function createEvolutionContent() {
+  return `<div class="tab-content" data-content="evolution">
+    <div id="evoChain"><div class="evo-loading">Loading…</div></div>
+  </div>`;
+}
+
+function createMovesContent(pokemon) {
+  const moves = pokemon.moves.slice(0, 40).map(createMoveTag).join('');
+  return `<div class="tab-content" data-content="moves">
+    <div class="moves-grid">${moves}</div>
   </div>`;
 }
 
 function createOverlayBody(pokemon) {
-  const abilities = createAbilitiesHTML(pokemon.abilities);
-  const stats = createStatsHTML(pokemon.stats);
   return `<div class="ov-body">
-    ${createInfoSection(pokemon)}
-    <div class="ov-section"><h4>Abilities</h4><div class="abilities">${abilities}</div></div>
-    <div class="ov-section"><h4>Base Stats</h4>${stats}</div>
-    <div id="evoChain" class="ov-section">
-      <h4>Evolution Chain</h4><div class="evo-loading">Loading…</div>
-    </div>
+    ${createAboutContent(pokemon)}
+    ${createStatsContent(pokemon)}
+    ${createEvolutionContent()}
+    ${createMovesContent(pokemon)}
   </div>`;
 }
 
@@ -133,5 +178,5 @@ function renderEvoChain(chainData) {
     .map(n => `<span class="evo-name" data-name="${n}">${capitalize(n)}</span>`)
     .join('<span class="evo-arrow"> → </span>');
   const el = document.getElementById('evoChain');
-  if (el) el.innerHTML = `<h4>Evolution Chain</h4><div class="evo-list">${inner}</div>`;
+  if (el) el.innerHTML = `<div class="evo-list">${inner}</div>`;
 }
