@@ -66,7 +66,7 @@ function createStatRow(stat) {
   return `<div class="stat-row">
     <span class="stat-label">${label}</span>
     <span class="stat-val">${stat.base_stat}</span>
-    <div class="stat-bar"><div class="stat-fill" style="width:${pct}%;background:${color}"></div></div>
+    <div class="stat-bar"><div class="stat-fill" data-pct="${pct}" style="width:0;background:${color}"></div></div>
   </div>`;
 }
 
@@ -122,7 +122,7 @@ function createOverlayHTML(pokemon) {
 }
 
 function buildEvoNames(chain, names = []) {
-  names.push(capitalize(chain.species.name));
+  names.push(chain.species.name);
   if (chain.evolves_to.length > 0) buildEvoNames(chain.evolves_to[0], names);
   return names;
 }
@@ -130,7 +130,7 @@ function buildEvoNames(chain, names = []) {
 function renderEvoChain(chainData) {
   const names = buildEvoNames(chainData.chain);
   const inner = names
-    .map(n => `<span class="evo-name">${n}</span>`)
+    .map(n => `<span class="evo-name" data-name="${n}">${capitalize(n)}</span>`)
     .join('<span class="evo-arrow"> → </span>');
   const el = document.getElementById('evoChain');
   if (el) el.innerHTML = `<h4>Evolution Chain</h4><div class="evo-list">${inner}</div>`;
