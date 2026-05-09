@@ -107,10 +107,9 @@ function createOverlayHeader(pokemon) {
   const img = getSprite(pokemon);
   return `<div class="ov-header" style="--card-color:${color}">
     <span class="poke-id">#${id}</span>
-    ${createOverlayImgHTML(img, name, color)}
     <h2>${name}</h2>
     <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
-    ${createTabNav()}
+    ${createOverlayImgHTML(img, name, color)}
   </div>`;
 }
 
@@ -165,6 +164,7 @@ function createMovesContent(pokemon) {
 
 function createOverlayBody(pokemon) {
   return `<div class="ov-body">
+    ${createTabNav()}
     ${createAboutContent(pokemon)}
     ${createStatsContent(pokemon)}
     ${createEvolutionContent()}
