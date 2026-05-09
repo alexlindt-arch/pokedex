@@ -131,11 +131,17 @@ function loadDescription(species) {
   if (el && entry) el.textContent = entry.flavor_text.replace(/[\f\n]/g, ' ');
 }
 
+function loadGenus(species) {
+  const genus = species.genera.find(g => g.language.name === 'en');
+  const el = document.getElementById('pokemonGenus');
+  if (el && genus) el.textContent = genus.genus.replace(' Pokémon', '');
+}
+
 function getGenderHTML(genderRate) {
   if (genderRate === -1) return 'Genderless';
   const female = ((genderRate / 8) * 100).toFixed(1);
   const male = (100 - parseFloat(female)).toFixed(1);
-  return `♂ ${male}%&nbsp;&nbsp;♀ ${female}%`;
+  return `<span style="color:#6890F0">♂ ${male}%</span>  <span style="color:#F85888">♀ ${female}%</span>`;
 }
 
 function renderBreedingInfo(species) {
@@ -145,15 +151,16 @@ function renderBreedingInfo(species) {
   const gender = getGenderHTML(species.gender_rate);
   const cycles = species.hatch_counter !== undefined ? `${species.hatch_counter} cycles` : '—';
   el.innerHTML = `
-    <div class="about-row"><span>Egg Groups</span><strong>${groups}</strong></div>
     <div class="about-row"><span>Gender</span><strong>${gender}</strong></div>
-    <div class="about-row"><span>Egg Cycles</span><strong>${cycles}</strong></div>
+    <div class="about-row"><span>Egg Groups</span><strong>${groups}</strong></div>
+    <div class="about-row"><span>Egg Cycle</span><strong>${cycles}</strong></div>
   `;
 }
 
 async function loadSpeciesData(pokemonId) {
   try {
     const species = await fetchSpecies(pokemonId);
+    loadGenus(species);
     loadDescription(species);
     renderBreedingInfo(species);
     const chainData = await fetchEvolutionChain(species.evolution_chain.url);
