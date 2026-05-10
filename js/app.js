@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+
 const state = {
   offset: 0,
   limit: 20,
@@ -5,6 +9,11 @@ const state = {
   currentIndex: -1,
   isLoading: false
 };
+
+
+/* ═══════════════════════════════════════════════
+   UI HELPERS
+═══════════════════════════════════════════════ */
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -57,6 +66,11 @@ function initTabListeners() {
   });
 }
 
+
+/* ═══════════════════════════════════════════════
+   GRID & LOADING
+═══════════════════════════════════════════════ */
+
 function appendPokemonsToGrid(pokemons) {
   const grid = document.getElementById('pokemonGrid');
   pokemons.forEach((p, i) => {
@@ -89,7 +103,7 @@ async function loadInitialPokemon() {
   await loadPokemons(0);
   state.offset = state.limit;
   const btn = document.getElementById('loadMoreBtn');
-  btn.style.display = '';
+  btn.style.display = 'block';
 }
 
 async function loadMorePokemon() {
@@ -101,6 +115,11 @@ async function loadMorePokemon() {
   setLoadMoreDisabled(false);
   state.isLoading = false;
 }
+
+
+/* ═══════════════════════════════════════════════
+   OVERLAY
+═══════════════════════════════════════════════ */
 
 async function openOverlay(pokemonId) {
   const pokemon = await fetchPokemonDetail(pokemonId);
@@ -126,6 +145,11 @@ async function navigateOverlay(direction) {
   if (newIndex < 0 || newIndex >= state.displayedIds.length) return;
   await openOverlay(state.displayedIds[newIndex]);
 }
+
+
+/* ═══════════════════════════════════════════════
+   SPECIES & EVOLUTION
+═══════════════════════════════════════════════ */
 
 function loadDescription(species) {
   const entry = species.flavor_text_entries.find(e => e.language.name === 'en');
@@ -184,6 +208,11 @@ function attachEvoListeners() {
   });
 }
 
+
+/* ═══════════════════════════════════════════════
+   SEARCH
+═══════════════════════════════════════════════ */
+
 async function handleSearch() {
   const query = document.getElementById('searchInput').value.trim();
   if (query.length < 3) return;
@@ -192,6 +221,11 @@ async function handleSearch() {
   if (!pokemon) { showNoResults(true); return; }
   openOverlay(pokemon.id);
 }
+
+
+/* ═══════════════════════════════════════════════
+   EVENT LISTENERS
+═══════════════════════════════════════════════ */
 
 function attachCardListeners() {
   document.querySelectorAll('.pokemon-card:not([data-bound])').forEach(card => {
@@ -236,6 +270,11 @@ function initEventListeners() {
   initSearchListeners();
   initKeyboardListeners();
 }
+
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
