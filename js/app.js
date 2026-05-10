@@ -86,10 +86,10 @@ async function loadPokemons(offset) {
 }
 
 async function loadInitialPokemon() {
-  document.getElementById('loadMoreBtn').classList.add('hidden');
   await loadPokemons(0);
   state.offset = state.limit;
-  document.getElementById('loadMoreBtn').classList.remove('hidden');
+  const btn = document.getElementById('loadMoreBtn');
+  btn.style.removeProperty('display');
 }
 
 async function loadMorePokemon() {
