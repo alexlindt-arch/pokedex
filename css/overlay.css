@@ -1,0 +1,76 @@
+/* ── Overlay Background ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ── Overlay Card ── */
+.overlay-card {
+  background: var(--bg-card);
+  border-radius: 0 0 24px 24px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100,160,220,0.3) transparent;
+  border: 1px solid var(--border);
+}
+
+.overlay-card::-webkit-scrollbar { width: 4px; }
+.overlay-card::-webkit-scrollbar-track { background: transparent; }
+.overlay-card::-webkit-scrollbar-thumb { background: rgba(100,160,220,0.3); border-radius: 4px; }
+.overlay-card::-webkit-scrollbar-thumb:hover { background: rgba(100,160,220,0.55); }
+
+/* ── Close Button ── */
+.close-btn {
+  position: absolute;
+  top: 0.8rem; right: 0.8rem;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.close-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* ── Navigation Buttons ── */
+.nav-btn {
+  background: rgba(18, 36, 68, 0.95);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 50px; height: 50px;
+  min-width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s, opacity 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.nav-btn:hover:not(:disabled) { background: #1a3a5c; transform: scale(1.08); }
+.nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
