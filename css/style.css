@@ -139,10 +139,10 @@ main { padding: 2rem 1.5rem 3rem; }
 .pokemon-card {
   background: var(--card-color);
   border-radius: 16px;
-  padding: 1.1rem 0 0 1.3rem;
+  padding: 0 0 0 1.3rem;
   cursor: pointer;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   height: 110px;
   overflow: hidden;
@@ -160,7 +160,6 @@ main { padding: 2rem 1.5rem 3rem; }
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  padding-bottom: 1rem;
 }
 
 .card-info h3 {
