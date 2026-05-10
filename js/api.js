@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════
+   CONFIG & CACHE
+═══════════════════════════════════════════════ */
+
 const BASE_URL = 'https://pokeapi.co/api/v2';
 const cache = {};
 
@@ -9,6 +13,11 @@ async function fetchWithCache(url) {
   cache[url] = data;
   return data;
 }
+
+
+/* ═══════════════════════════════════════════════
+   API ENDPOINTS
+═══════════════════════════════════════════════ */
 
 async function fetchPokemonList(offset, limit) {
   return fetchWithCache(`${BASE_URL}/pokemon?offset=${offset}&limit=${limit}`);
