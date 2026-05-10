@@ -60,10 +60,12 @@ function createCardHTML(pokemon) {
   const color = getTypeColor(pokemon.types);
   const name = formatName(pokemon.name);
   const img = getSprite(pokemon);
+  const id = '#' + String(pokemon.id).padStart(3, '0');
   return `<div class="pokemon-card" data-id="${pokemon.id}" style="--card-color:${color}">
     <div class="card-info">
       <h3>${name}</h3>
       <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
+      <span class="card-id">${id}</span>
     </div>
     <img src="${img}" alt="${name}" loading="lazy">
   </div>`;
