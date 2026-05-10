@@ -138,7 +138,7 @@ main { padding: 2rem 1.5rem 3rem; }
 
 .pokemon-card {
   background: var(--card-color);
-  border-radius: 16px;
+  border-radius: 16px 0 0 16px;
   padding: 0 0 0 1.3rem;
   cursor: pointer;
   display: flex;
