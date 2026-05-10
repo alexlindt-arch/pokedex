@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pokédex</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/header.css" />
   <link rel="stylesheet" href="css/grid.css" />
   <link rel="stylesheet" href="css/card.css" />
   <link rel="stylesheet" href="css/loading.css" />
   <link rel="stylesheet" href="css/overlay.css" />
   <link rel="stylesheet" href="css/overlay-detail.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
 </head>
 <body>
   <header>
@@ -46,7 +45,7 @@
       <p id="noResults" class="no-results hidden">No Pokémon found for your search.</p>
       <p id="pokeCount" class="poke-count"></p>
       <div id="pokemonGrid" class="pokemon-grid"></div>
-      <button id="loadMoreBtn" class="load-more-btn" style="display:none">Load More Pokémon</button>
+      <button id="loadMoreBtn" class="load-more-btn hidden">Load More Pokémon</button>
     </div>
   </main>
 
@@ -72,6 +71,6 @@
 
   <script src="js/api.js"></script>
   <script src="js/render.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

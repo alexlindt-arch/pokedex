@@ -102,8 +102,7 @@ async function loadPokemons(offset) {
 async function loadInitialPokemon() {
   await loadPokemons(0);
   state.offset = state.limit;
-  const btn = document.getElementById('loadMoreBtn');
-  btn.style.display = 'block';
+  document.getElementById('loadMoreBtn').classList.remove('hidden');
 }
 
 async function loadMorePokemon() {
@@ -122,20 +121,22 @@ async function loadMorePokemon() {
 ═══════════════════════════════════════════════ */
 
 async function openOverlay(pokemonId) {
-  const pokemon = await fetchPokemonDetail(pokemonId);
-  state.currentIndex = state.displayedIds.indexOf(pokemon.id);
-  document.getElementById('overlayContent').innerHTML = createOverlayHTML(pokemon);
-  document.getElementById('overlayCard').scrollTop = 0;
-  document.getElementById('overlay').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  updateNavBtns();
-  initTabListeners();
-  loadSpeciesData(pokemon.id);
+  try {
+    const pokemon = await fetchPokemonDetail(pokemonId);
+    state.currentIndex = state.displayedIds.indexOf(pokemon.id);
+    document.getElementById('overlayContent').innerHTML = createOverlayHTML(pokemon);
+    document.getElementById('overlayCard').scrollTop = 0;
+    document.getElementById('overlay').classList.remove('hidden');
+    updateNavBtns();
+    initTabListeners();
+    loadSpeciesData(pokemon.id);
+  } catch (err) {
+    console.error('Failed to open overlay:', err);
+  }
 }
 
 function closeOverlay() {
   document.getElementById('overlay').classList.add('hidden');
-  document.body.style.overflow = '';
 }
 
 async function navigateOverlay(direction) {
@@ -143,7 +144,11 @@ async function navigateOverlay(direction) {
   if (state.currentIndex < 0) return;
   const newIndex = state.currentIndex + direction;
   if (newIndex < 0 || newIndex >= state.displayedIds.length) return;
-  await openOverlay(state.displayedIds[newIndex]);
+  try {
+    await openOverlay(state.displayedIds[newIndex]);
+  } catch (err) {
+    console.error('Navigation failed:', err);
+  }
 }
 
 
@@ -167,7 +172,7 @@ function getGenderHTML(genderRate) {
   if (genderRate === -1) return 'Genderless';
   const female = ((genderRate / 8) * 100).toFixed(1);
   const male = (100 - parseFloat(female)).toFixed(1);
-  return `<span style="color:#6890F0">♂ ${male}%</span>  <span style="color:#F85888">♀ ${female}%</span>`;
+  return `<span class="gender-male">♂ ${male}%</span>  <span class="gender-female">♀ ${female}%</span>`;
 }
 
 function renderBreedingInfo(species) {
@@ -200,10 +205,13 @@ async function loadSpeciesData(pokemonId) {
 
 function attachEvoListeners() {
   document.querySelectorAll('.evo-name[data-name]').forEach(span => {
-    span.style.cursor = 'pointer';
     span.addEventListener('click', async () => {
-      const pokemon = await fetchPokemonDetail(span.dataset.name);
-      openOverlay(pokemon.id);
+      try {
+        const pokemon = await fetchPokemonDetail(span.dataset.name);
+        await openOverlay(pokemon.id);
+      } catch (err) {
+        console.error('Failed to navigate evolution:', err);
+      }
     });
   });
 }
@@ -217,9 +225,13 @@ async function handleSearch() {
   const query = document.getElementById('searchInput').value.trim();
   if (query.length < 3) return;
   showNoResults(false);
-  const pokemon = await searchPokemon(query);
-  if (!pokemon) { showNoResults(true); return; }
-  openOverlay(pokemon.id);
+  try {
+    const pokemon = await searchPokemon(query);
+    if (!pokemon) { showNoResults(true); return; }
+    await openOverlay(pokemon.id);
+  } catch {
+    showNoResults(true);
+  }
 }
 
 

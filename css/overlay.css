@@ -74,3 +74,14 @@
 
 .nav-btn:hover:not(:disabled) { background: #1a3a5c; transform: scale(1.08); }
 .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+@media (max-width: 600px) {
+  .overlay { gap: 0.4rem; padding: 0.5rem; }
+  .overlay-card { max-width: calc(100% - 80px); }
+  .nav-btn { width: 36px; height: 36px; min-width: 36px; font-size: 1.6rem; }
+}
+
+@media (max-width: 320px) {
+  .overlay-card { max-width: calc(100% - 60px); }
+  .nav-btn { width: 28px; height: 28px; min-width: 28px; font-size: 1.3rem; }
+}
