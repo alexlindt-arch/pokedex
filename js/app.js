@@ -89,7 +89,7 @@ async function loadInitialPokemon() {
   await loadPokemons(0);
   state.offset = state.limit;
   const btn = document.getElementById('loadMoreBtn');
-  btn.style.removeProperty('display');
+  btn.style.display = '';
 }
 
 async function loadMorePokemon() {
