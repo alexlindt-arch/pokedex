@@ -1,0 +1,102 @@
+/* ── Loading Overlay ── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(10, 20, 40, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.25s ease;
+}
+
+@keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+.loading-box { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+
+/* ── Pokéball Spinner ── */
+.pokeball-spinner {
+  width: 90px;
+  height: 90px;
+  position: relative;
+  animation: spin 0.9s linear infinite;
+  filter: drop-shadow(0 0 16px rgba(238,21,21,0.5));
+}
+
+.pokeball-top {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
+  background: #ee1515;
+  border-radius: 90px 90px 0 0;
+  border: 4px solid #0a1525;
+  border-bottom: none;
+}
+
+.pokeball-bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 50%;
+  background: #1a3a5c;
+  border-radius: 0 0 90px 90px;
+  border: 4px solid #0a1525;
+  border-top: none;
+}
+
+.pokeball-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px; height: 28px;
+  background: #1a3a5c;
+  border-radius: 50%;
+  border: 4px solid #0a1525;
+  z-index: 2;
+  box-shadow: 0 0 0 4px #0a1525, 0 0 0 8px #1a3a5c;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Loading Text ── */
+.loading-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: '';    }
+  25%  { content: '.';   }
+  50%  { content: '..';  }
+  75%  { content: '...'; }
+}
+
+/* ── Load More Button ── */
+.load-more-btn {
+  display: block;
+  margin: 0.5rem auto 0;
+  padding: 0.85rem 2.8rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 16px rgba(238,21,21,0.3);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.load-more-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 22px rgba(238,21,21,0.5);
+}
+
+.load-more-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
