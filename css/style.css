@@ -169,6 +169,13 @@ main { padding: 2rem 1.5rem 3rem; }
   text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
+.card-id {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.5px;
+}
+
 .pokemon-card > img {
   width: 96px;
   height: 96px;
