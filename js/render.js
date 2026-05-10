@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════
+   COLORS & CONFIG
+═══════════════════════════════════════════════ */
+
 const typeColors = {
   normal: '#A8A878', fire: '#F08030', water: '#6890F0',
   electric: '#F8D030', grass: '#78C850', ice: '#98D8D8',
@@ -17,6 +21,11 @@ const statLabels = {
   'special-attack': 'Sp. Atk', 'special-defense': 'Sp. Def', speed: 'Speed'
 };
 
+
+/* ═══════════════════════════════════════════════
+   FORMATTERS & HELPERS
+═══════════════════════════════════════════════ */
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -34,16 +43,6 @@ function getSprite(pokemon) {
     || pokemon.sprites?.front_default || '';
 }
 
-function createTypeBadge(typeObj) {
-  const name = typeObj.type.name;
-  const color = typeColors[name] || '#777';
-  return `<span class="type-badge" style="background:${color}">${capitalize(name)}</span>`;
-}
-
-function createTypeBadges(types) {
-  return types.map(createTypeBadge).join('');
-}
-
 function formatHeight(dm) {
   const totalIn = (dm * 10) / 2.54;
   const ft = Math.floor(totalIn / 12);
@@ -54,6 +53,21 @@ function formatHeight(dm) {
 function formatWeight(hg) {
   const kg = hg / 10;
   return `${(kg * 2.20462).toFixed(1)} lbs (${kg.toFixed(1)} kg)`;
+}
+
+
+/* ═══════════════════════════════════════════════
+   CARD (LIST VIEW)
+═══════════════════════════════════════════════ */
+
+function createTypeBadge(typeObj) {
+  const name = typeObj.type.name;
+  const color = typeColors[name] || '#777';
+  return `<span class="type-badge" style="background:${color}">${capitalize(name)}</span>`;
+}
+
+function createTypeBadges(types) {
+  return types.map(createTypeBadge).join('');
 }
 
 function createCardHTML(pokemon) {
@@ -71,34 +85,45 @@ function createCardHTML(pokemon) {
   </div>`;
 }
 
-function createStatRow(stat) {
-  const name = stat.stat.name;
-  const color = statColors[name] || '#aaa';
-  const label = statLabels[name] || name;
-  const pct = Math.min((stat.base_stat / 255) * 100, 100).toFixed(1);
-  return `<div class="stat-row">
-    <span class="stat-label">${label}</span>
-    <span class="stat-val">${stat.base_stat}</span>
-    <div class="stat-bar"><div class="stat-fill" data-pct="${pct}" style="width:0;background:${color}"></div></div>
+
+/* ═══════════════════════════════════════════════
+   OVERLAY – HEADER & IMAGE
+═══════════════════════════════════════════════ */
+
+function createOverlayImgHTML(img, name, color) {
+  return `<div class="img-wrapper">
+    <div class="img-glow" style="background:${color}"></div>
+    <img src="${img}" alt="${name}" class="ov-img">
   </div>`;
 }
 
-function createStatsHTML(stats) {
-  return stats.map(createStatRow).join('');
-}
-
-function createTotalRow(stats) {
-  const total = stats.reduce((sum, s) => sum + s.base_stat, 0);
-  return `<div class="stat-row stat-total">
-    <span class="stat-label">Total</span>
-    <span class="stat-val">${total}</span>
-    <div class="stat-bar"></div>
+function createOverlayHeader(pokemon) {
+  const color = getTypeColor(pokemon.types);
+  const name = formatName(pokemon.name);
+  const id = String(pokemon.id).padStart(3, '0');
+  return `<div class="ov-header" style="--card-color:${color}">
+    <div class="ov-name-row">
+      <div class="ov-header-left">
+        <h2>${name}</h2>
+        <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
+      </div>
+      <span class="poke-id">#${id}</span>
+    </div>
   </div>`;
 }
 
-function createMoveTag(move) {
-  return `<span class="move-tag">${formatName(move.move.name)}</span>`;
+function createOverlayHTML(pokemon) {
+  const color = getTypeColor(pokemon.types);
+  const img = getSprite(pokemon);
+  const name = formatName(pokemon.name);
+  const boundary = `<div class="ov-img-boundary" style="--card-color:${color}">${createOverlayImgHTML(img, name, color)}</div>`;
+  return createOverlayHeader(pokemon) + boundary + createOverlayBody(pokemon);
 }
+
+
+/* ═══════════════════════════════════════════════
+   OVERLAY – TABS & BODY
+═══════════════════════════════════════════════ */
 
 function createTabNav() {
   return `<div class="tab-nav">
@@ -136,6 +161,31 @@ function createAboutContent(pokemon) {
   </div>`;
 }
 
+function createStatRow(stat) {
+  const name = stat.stat.name;
+  const color = statColors[name] || '#aaa';
+  const label = statLabels[name] || name;
+  const pct = Math.min((stat.base_stat / 255) * 100, 100).toFixed(1);
+  return `<div class="stat-row">
+    <span class="stat-label">${label}</span>
+    <span class="stat-val">${stat.base_stat}</span>
+    <div class="stat-bar"><div class="stat-fill" data-pct="${pct}" style="width:0;background:${color}"></div></div>
+  </div>`;
+}
+
+function createStatsHTML(stats) {
+  return stats.map(createStatRow).join('');
+}
+
+function createTotalRow(stats) {
+  const total = stats.reduce((sum, s) => sum + s.base_stat, 0);
+  return `<div class="stat-row stat-total">
+    <span class="stat-label">Total</span>
+    <span class="stat-val">${total}</span>
+    <div class="stat-bar"></div>
+  </div>`;
+}
+
 function createStatsContent(pokemon) {
   return `<div class="tab-content" data-content="stats">
     ${createStatsHTML(pokemon.stats)}
@@ -149,32 +199,14 @@ function createEvolutionContent() {
   </div>`;
 }
 
+function createMoveTag(move) {
+  return `<span class="move-tag">${formatName(move.move.name)}</span>`;
+}
+
 function createMovesContent(pokemon) {
   const moves = pokemon.moves.slice(0, 40).map(createMoveTag).join('');
   return `<div class="tab-content" data-content="moves">
     <div class="moves-grid">${moves}</div>
-  </div>`;
-}
-
-function createOverlayImgHTML(img, name, color) {
-  return `<div class="img-wrapper">
-    <div class="img-glow" style="background:${color}"></div>
-    <img src="${img}" alt="${name}" class="ov-img">
-  </div>`;
-}
-
-function createOverlayHeader(pokemon) {
-  const color = getTypeColor(pokemon.types);
-  const name = formatName(pokemon.name);
-  const id = String(pokemon.id).padStart(3, '0');
-  return `<div class="ov-header" style="--card-color:${color}">
-    <div class="ov-name-row">
-      <div class="ov-header-left">
-        <h2>${name}</h2>
-        <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
-      </div>
-      <span class="poke-id">#${id}</span>
-    </div>
   </div>`;
 }
 
@@ -188,13 +220,10 @@ function createOverlayBody(pokemon) {
   </div>`;
 }
 
-function createOverlayHTML(pokemon) {
-  const color = getTypeColor(pokemon.types);
-  const img = getSprite(pokemon);
-  const name = formatName(pokemon.name);
-  const boundary = `<div class="ov-img-boundary" style="--card-color:${color}">${createOverlayImgHTML(img, name, color)}</div>`;
-  return createOverlayHeader(pokemon) + boundary + createOverlayBody(pokemon);
-}
+
+/* ═══════════════════════════════════════════════
+   EVOLUTION CHAIN
+═══════════════════════════════════════════════ */
 
 function buildEvoNames(chain, names = []) {
   names.push(chain.species.name);
