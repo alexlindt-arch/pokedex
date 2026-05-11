@@ -39,6 +39,10 @@ function getTypeColor(types) {
 }
 
 function getSprite(pokemon) {
+  return `assets/img/pokemon/${pokemon.id}.png`;
+}
+
+function getSpriteFallback(pokemon) {
   return pokemon.sprites?.other?.['official-artwork']?.front_default
     || pokemon.sprites?.front_default || '';
 }
@@ -74,6 +78,7 @@ function createCardHTML(pokemon) {
   const color = getTypeColor(pokemon.types);
   const name = formatName(pokemon.name);
   const img = getSprite(pokemon);
+  const fallback = getSpriteFallback(pokemon);
   const id = '#' + String(pokemon.id).padStart(3, '0');
   return `<div class="pokemon-card" data-id="${pokemon.id}" style="--card-color:${color}">
     <div class="card-info">
@@ -81,7 +86,7 @@ function createCardHTML(pokemon) {
       <div class="type-badges">${createTypeBadges(pokemon.types)}</div>
       <span class="card-id">${id}</span>
     </div>
-    <img src="${img}" alt="${name}" loading="lazy">
+    <img src="${img}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='${fallback}'">
   </div>`;
 }
 
@@ -90,10 +95,10 @@ function createCardHTML(pokemon) {
    OVERLAY – HEADER & IMAGE
 ═══════════════════════════════════════════════ */
 
-function createOverlayImgHTML(img, name, color) {
+function createOverlayImgHTML(img, fallback, name, color) {
   return `<div class="img-wrapper">
     <div class="img-glow" style="background:${color}"></div>
-    <img src="${img}" alt="${name}" class="ov-img">
+    <img src="${img}" alt="${name}" class="ov-img" onerror="this.onerror=null;this.src='${fallback}'">
   </div>`;
 }
 
@@ -115,8 +120,9 @@ function createOverlayHeader(pokemon) {
 function createOverlayHTML(pokemon) {
   const color = getTypeColor(pokemon.types);
   const img = getSprite(pokemon);
+  const fallback = getSpriteFallback(pokemon);
   const name = formatName(pokemon.name);
-  const boundary = `<div class="ov-img-boundary" style="--card-color:${color}">${createOverlayImgHTML(img, name, color)}</div>`;
+  const boundary = `<div class="ov-img-boundary" style="--card-color:${color}">${createOverlayImgHTML(img, fallback, name, color)}</div>`;
   return createOverlayHeader(pokemon) + boundary + createOverlayBody(pokemon);
 }
 
